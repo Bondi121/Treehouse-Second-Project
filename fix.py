@@ -19,60 +19,41 @@ def clean_data_players(PLAYERS):
     return new_players
 
 
-def balance_teams_function(players_clean_data):
-    num_players_team = len(players_clean_data) / len(TEAMS)
+def balance_teams_function(PLAYERS):
+    num_players_team = len(PLAYERS) / len(TEAMS)
     num_players_team = int(num_players_team)
     size = num_players_team
     tracker = 0
     team_players = {}
     for team in TEAMS:
-        team_players[team] = players_clean_data[tracker:num_players_team]
+        team_players[team] = PLAYERS[tracker:num_players_team]
         tracker += size
         num_players_team += size
     return team_players
 
 
 def decide_function():
-    choice = input("Enter an option between A or B ")
-
-    if choice.upper().strip() not in ["A","B"]:
-        print("Please choose between A or B")
-        decide_function()
+    choice = input("Enter an option between A or B:").upper().strip()
     return choice
-
-
-def continue_function():
-    choice = input("Please type CONTINUE to continue..")
-    if choice.upper().strip() == "CONTINUE":
-        start_game()
-    else:
-        print("Thank you, have a nice day.")
-        quit()
-
 
 def display_teams():
     print("A) Panthers")
     print("B) Bandits")
-    print("C) Warriors")
+    print("C) Warriors \n")
 
+    choice = input("Enter an option between A,B or C \n").upper().strip()
     selected_team = None
-    choice = input("Enter an option between A,B or C ")
-    if choice.upper().strip() == "A":
+    if choice == "A":
         selected_team = "Panthers"
-    elif choice.upper().strip() == "B":
+    elif choice == "B":
         selected_team = "Bandits"
-    elif choice.upper().strip() == "C":
+    elif choice == "C":
         selected_team = "Warriors"
     else:
-        print("Chose between A, B or C")
-        display_teams()
-
-    if selected_team is None:
-        display_teams()
+        print('Wrong selection, please between A, B, or C.')
+    
+    # print(selected_team)
     return selected_team
-
-
-
 
 def split_guardian(list_of_guardian):
     save_guardians = ''
@@ -80,6 +61,11 @@ def split_guardian(list_of_guardian):
         save_guardians = save_guardians + guardian + ', '
 
     return save_guardians
+
+def continue_function():
+    choice = input("Please type CONTINUE to continue... or random key to quit: ").upper().strip()
+    return choice
+
 
 def start_game():
     print("BASKETBALL TEAM STATS TOOL \n") 
@@ -89,17 +75,19 @@ def start_game():
     print("\t B) Quit")
     
     decision = decide_function()
-    #if decision.upper().strip() == "B":
-    #    print("Thank you, have a nice day.")
-    #    quit()
-    if decision.upper().strip() == "A":
+    while decision not in ['A', 'B']:
+        print("Please choose between A or B:")
+        decision = decide_function()
+
+    if decision == "A":
         team_selected = display_teams()
+        while team_selected == None:
+            team_selected = display_teams()
         clean_players = clean_data_players(PLAYERS)
         balance_team = balance_teams_function(clean_players)
-        team_stat_to_display = balance_team[team_selected] 
-        
+        team_stat_to_display = balance_team[team_selected]
         print(f'Team {team_selected} stat')
-        print('---------a-----------------')
+        print('--------------------------')
 
         select_team_len = len(team_stat_to_display)
         num_of_experience = 0
@@ -107,13 +95,13 @@ def start_game():
         sum_height = 0
         save_players_name = "\t"
         guardians = '\t'
-
+        
 
         for player in team_stat_to_display:
-            # print(player['guardians'])
             splitted_guardian = split_guardian(player['guardians'])
             guardians = guardians +  splitted_guardian
             save_players_name = save_players_name + player["name"] + ", "
+            
             if player['experience'] == True:
                 num_of_experience += 1
             else:
@@ -136,13 +124,19 @@ def start_game():
 
         print(guardians)
 
-        continue_function()
+        to_continue = continue_function()
 
-    else:
+        while to_continue == 'CONTINUE':
+            print('Display new game stat')     
+            start_game()
+
+        print("Thank you, have a nice day.")
+
+        quit()
+
+    elif decision.upper().strip() == 'B':
         print("You decided to quit, have a nice day")
         quit()
- 
-
 
 if __name__ == '__main__':
     start_game()
