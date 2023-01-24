@@ -1,3 +1,5 @@
+import string
+
 from constants import TEAMS, PLAYERS
 
 def clean_data_players(PLAYERS):
@@ -31,28 +33,28 @@ def balance_teams_function(PLAYERS):
         num_players_team += size
     return team_players
 
-
 def decide_function():
     choice = input("Enter an option between A or B:").upper().strip()
     return choice
 
 def display_teams():
-    print("A) Panthers")
-    print("B) Bandits")
-    print("C) Warriors \n")
+    identification = list(string.ascii_uppercase)
+    team_and_identication = {}
+    for i, team in enumerate(TEAMS):
+        print(f"{identification[i]}) {team}") 
 
-    choice = input("Enter an option between A,B or C \n").upper().strip()
+        team_and_identication[identification[i]] = team 
+
+    choice = input(f"Enter an option between {identification[0]} to {identification[len(team_and_identication) - 1]}, \n").upper().strip()
     selected_team = None
-    if choice == "A":
-        selected_team = "Panthers"
-    elif choice == "B":
-        selected_team = "Bandits"
-    elif choice == "C":
-        selected_team = "Warriors"
+    while choice not in team_and_identication:
+        choice = input(f"Enter an option between {identification[0]} to {identification[len(team_and_identication) - 1]}, \n").upper().strip()
+        
+    if choice:
+        selected_team = team_and_identication[choice]
     else:
-        print('Wrong selection, please between A, B, or C.')
+        print('Wrong selection, please between A, B, or C:')
     
-    # print(selected_team)
     return selected_team
 
 def split_guardian(list_of_guardian):
@@ -76,13 +78,16 @@ def start_game():
     
     decision = decide_function()
     while decision not in ['A', 'B']:
+        print('again')
         print("Please choose between A or B:")
         decision = decide_function()
 
     if decision == "A":
         team_selected = display_teams()
+        print(team_selected)
         while team_selected == None:
             team_selected = display_teams()
+
         clean_players = clean_data_players(PLAYERS)
         balance_team = balance_teams_function(clean_players)
         team_stat_to_display = balance_team[team_selected]
@@ -128,7 +133,7 @@ def start_game():
 
         while to_continue == 'CONTINUE':
             print('Display new game stat')     
-            start_game()
+            start_game() 
 
         print("Thank you, have a nice day.")
 
@@ -140,3 +145,4 @@ def start_game():
 
 if __name__ == '__main__':
     start_game()
+

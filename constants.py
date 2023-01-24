@@ -5,7 +5,7 @@ TEAMS = [
 ]
 
 PLAYERS = [{
-        'name': 'Karl Saygan',
+        'name': 'test test test Saygan',
         'guardians': 'Heather Bledsoe',
         'experience': 'YES',
         'height': '42 inches'
